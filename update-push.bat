@@ -31,7 +31,7 @@ echo.
 echo === Committing ===
 git diff --cached --quiet
 if errorlevel 1 (
-    git commit -m "feat(ui): Level 1 polish - accounting-app feel, hide Series, collapse Tax, vertical compression" || (echo COMMIT FAILED & exit /b 1)
+    git commit -m "fix(assets): rename CSS to qpi_styles.css to bypass CDN cache; v0.0.4" || (echo COMMIT FAILED & exit /b 1)
 ) else (
     echo Nothing staged to commit. Working tree may already match origin.
 )

@@ -1,0 +1,315 @@
+/* ============================================================
+   Quick Purchase Invoice — Level 1 polish
+   Style brief: crisp accounting-app feel (Xero/QuickBooks).
+   White surfaces, confident teal accent, strong totals contrast,
+   colour-coded Item vs Account rows, vertically compressed.
+   Scoped under .quick-pi-form so it cannot leak to other pages.
+   ============================================================ */
+
+.quick-pi-form {
+  --qpi-bg:           #f6f8fa;
+  --qpi-card:         #ffffff;
+  --qpi-border:       #e3e8ee;
+  --qpi-border-soft:  #eef2f6;
+  --qpi-text:         #1f2937;
+  --qpi-text-soft:    #5b6471;
+  --qpi-muted:        #98a2b3;
+
+  --qpi-accent:       #0891b2;   /* cyan-600  — primary action / focus */
+  --qpi-accent-dark:  #0e7490;   /* cyan-700  — hover / pressed */
+  --qpi-accent-soft:  #ecfeff;   /* cyan-50   — input focus tint */
+
+  --qpi-item:         #2563eb;   /* blue-600  — Item rows */
+  --qpi-item-soft:    #eff6ff;   /* blue-50 */
+  --qpi-account:      #059669;   /* emerald-600 — Account rows */
+  --qpi-account-soft: #ecfdf5;   /* emerald-50 */
+
+  --qpi-total:        #0f172a;   /* slate-900 — Grand Total numerals */
+  --qpi-total-bg:     linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
+
+  --qpi-shadow-sm:    0 1px 2px rgba(15, 23, 42, 0.04);
+  --qpi-shadow-md:    0 2px 6px rgba(15, 23, 42, 0.06);
+  --qpi-radius:       10px;
+}
+
+/* --- page surface ------------------------------------------------- */
+
+.quick-pi-form .layout-main-section,
+.quick-pi-form .form-page {
+  background: var(--qpi-bg);
+}
+
+.quick-pi-form .layout-main-section .form-page {
+  background: transparent;
+}
+
+/* --- form sections (cards) --------------------------------------- */
+
+.quick-pi-form .form-section {
+  background: var(--qpi-card);
+  border: 1px solid var(--qpi-border-soft);
+  border-radius: var(--qpi-radius);
+  margin: 10px 0 !important;
+  padding: 14px 18px !important;
+  box-shadow: var(--qpi-shadow-sm);
+}
+
+.quick-pi-form .form-section .section-head {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--qpi-text-soft);
+  font-weight: 600;
+  padding: 0 0 8px 0;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--qpi-border-soft);
+}
+
+/* No section label = no border treatment (avoids empty stub bars) */
+.quick-pi-form .form-section .section-head:empty {
+  display: none;
+}
+
+/* Compress the gaps between fields so the page isn't tall */
+.quick-pi-form .form-column .frappe-control {
+  margin-bottom: 8px;
+}
+
+/* --- inputs -------------------------------------------------------- */
+
+.quick-pi-form .control-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--qpi-text-soft);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-bottom: 3px;
+}
+
+.quick-pi-form .form-control,
+.quick-pi-form .input-with-feedback {
+  background: #ffffff !important;
+  border: 1px solid var(--qpi-border) !important;
+  border-radius: 6px !important;
+  color: var(--qpi-text);
+  font-size: 13.5px;
+  padding: 7px 10px;
+  height: auto;
+  min-height: 32px;
+  box-shadow: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.quick-pi-form .form-control:hover {
+  border-color: #c8d3df !important;
+}
+
+.quick-pi-form .form-control:focus,
+.quick-pi-form .input-with-feedback:focus {
+  border-color: var(--qpi-accent) !important;
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12) !important;
+  outline: none;
+}
+
+/* Bill No — make it the visually dominant header field */
+.quick-pi-form .frappe-control[data-fieldname="bill_no"] .form-control {
+  font-weight: 600;
+  font-size: 14.5px;
+  letter-spacing: 0.01em;
+}
+
+.quick-pi-form .frappe-control[data-fieldname="bill_no"] .control-label::before {
+  content: "📄 ";
+}
+
+/* Supplier name (read-only fetch) — quieter visual weight */
+.quick-pi-form .frappe-control[data-fieldname="supplier_name"] .form-control {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--qpi-text-soft);
+  font-style: italic;
+  padding-left: 0;
+}
+
+/* --- items grid --------------------------------------------------- */
+
+.quick-pi-form .frappe-control[data-fieldname="items"] {
+  margin-top: 6px;
+}
+
+.quick-pi-form .grid-heading-row {
+  background: #f1f5f9 !important;
+  border-bottom: 1px solid var(--qpi-border) !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+  color: var(--qpi-text-soft);
+}
+
+.quick-pi-form .grid-body {
+  background: var(--qpi-card);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--qpi-border-soft);
+}
+
+.quick-pi-form .grid-row {
+  border-bottom: 1px solid var(--qpi-border-soft);
+  transition: background 0.1s ease;
+}
+
+.quick-pi-form .grid-row:hover {
+  background: #fbfcfd;
+}
+
+/* Type-coloured left accent strip — added per-row by the form script */
+.quick-pi-form .grid-row.qpi-type-item {
+  box-shadow: inset 4px 0 0 var(--qpi-item);
+}
+.quick-pi-form .grid-row.qpi-type-account {
+  box-shadow: inset 4px 0 0 var(--qpi-account);
+}
+
+/* Tint the Type cell itself like a pill */
+.quick-pi-form .grid-row.qpi-type-item [data-fieldname="entry_type"] .form-control,
+.quick-pi-form .grid-row.qpi-type-item [data-fieldname="entry_type"] select {
+  background: var(--qpi-item-soft) !important;
+  color: var(--qpi-item) !important;
+  font-weight: 600;
+  border-color: transparent !important;
+}
+.quick-pi-form .grid-row.qpi-type-account [data-fieldname="entry_type"] .form-control,
+.quick-pi-form .grid-row.qpi-type-account [data-fieldname="entry_type"] select {
+  background: var(--qpi-account-soft) !important;
+  color: var(--qpi-account) !important;
+  font-weight: 600;
+  border-color: transparent !important;
+}
+
+/* Static (non-edit) mode for the Type cell — render as a coloured chip */
+.quick-pi-form .grid-row.qpi-type-item [data-fieldname="entry_type"] .static-area,
+.quick-pi-form .grid-row.qpi-type-item [data-fieldname="entry_type"] .grid-static-col {
+  background: var(--qpi-item-soft);
+  color: var(--qpi-item);
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 2px 10px;
+  display: inline-block;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+.quick-pi-form .grid-row.qpi-type-account [data-fieldname="entry_type"] .static-area,
+.quick-pi-form .grid-row.qpi-type-account [data-fieldname="entry_type"] .grid-static-col {
+  background: var(--qpi-account-soft);
+  color: var(--qpi-account);
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 2px 10px;
+  display: inline-block;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+
+/* Right-align numeric grid cells */
+.quick-pi-form .grid-row [data-fieldname="qty"] .static-area,
+.quick-pi-form .grid-row [data-fieldname="rate"] .static-area,
+.quick-pi-form .grid-row [data-fieldname="amount"] .static-area {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Add-row button: subtler, hugs the grid */
+.quick-pi-form .grid-add-row,
+.quick-pi-form .grid-footer .grid-add-row {
+  color: var(--qpi-accent) !important;
+  font-weight: 600;
+}
+
+/* --- totals section — make the Grand Total visually loud --------- */
+
+.quick-pi-form .frappe-control[data-fieldname="grand_total"] {
+  background: var(--qpi-total-bg);
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  padding: 10px 14px !important;
+  margin-top: 4px;
+  box-shadow: var(--qpi-shadow-md);
+}
+
+.quick-pi-form .frappe-control[data-fieldname="grand_total"] .control-label {
+  text-transform: uppercase;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--qpi-accent-dark);
+  margin-bottom: 0;
+}
+
+.quick-pi-form .frappe-control[data-fieldname="grand_total"] .control-value,
+.quick-pi-form .frappe-control[data-fieldname="grand_total"] .form-control {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--qpi-total);
+  font-variant-numeric: tabular-nums;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* Net Total + Total Taxes — quieter siblings of Grand Total */
+.quick-pi-form .frappe-control[data-fieldname="net_total"] .control-value,
+.quick-pi-form .frappe-control[data-fieldname="total_taxes_and_charges"] .control-value {
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- collapsed "Tax" section — slimmer when closed --------------- */
+
+.quick-pi-form .form-section.collapsed-section,
+.quick-pi-form .form-section .section-body[style*="display: none"] {
+  padding: 4px 18px !important;
+}
+
+.quick-pi-form .form-section .section-head[data-fieldname="section_taxes"]::after {
+  content: " (click to set tax template)";
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--qpi-muted);
+  margin-left: 6px;
+  font-size: 11px;
+}
+
+/* --- header / sidebar polish ------------------------------------- */
+
+.quick-pi-form .page-actions .primary-action,
+.quick-pi-form .page-actions .btn-primary {
+  background: var(--qpi-accent) !important;
+  border-color: var(--qpi-accent) !important;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.quick-pi-form .page-actions .primary-action:hover,
+.quick-pi-form .page-actions .btn-primary:hover {
+  background: var(--qpi-accent-dark) !important;
+  border-color: var(--qpi-accent-dark) !important;
+}
+
+/* --- vertical compression ---------------------------------------- */
+
+.quick-pi-form .layout-side-section { padding-top: 8px; }
+
+.quick-pi-form .form-dashboard,
+.quick-pi-form .form-dashboard-wrapper {
+  margin-bottom: 6px;
+}
+
+.quick-pi-form .std-form-layout > .form-section:first-child {
+  margin-top: 4px !important;
+}
+
+/* Hide naming_series visually even though it's set behind the scenes */
+.quick-pi-form .frappe-control[data-fieldname="naming_series"] {
+  display: none !important;
+}

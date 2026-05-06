@@ -7,7 +7,7 @@ app_license = "MIT"
 
 # Includes in <head>
 # ------------------
-app_include_css = "/assets/quick_purchase_invoice/css/quick_pi.css"
+app_include_css = "/assets/quick_purchase_invoice/css/qpi_styles.css"
 # app_include_js  = "/assets/quick_purchase_invoice/js/quick_pi.js"
 
 # Fixtures (none for v0.0.1)
