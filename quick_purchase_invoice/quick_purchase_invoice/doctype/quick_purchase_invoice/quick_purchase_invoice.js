@@ -9,6 +9,7 @@
 frappe.ui.form.on("Quick Purchase Invoice", {
     refresh(frm) {
         frm.page.wrapper.addClass("quick-pi-form");
+        paint_row_classes(frm);
 
         // After submit, jump straight to a new blank one (clear & next).
         if (frm.doc.docstatus === 1 && frm.doc.linked_purchase_invoice && !frm._post_submit_handled) {
@@ -101,6 +102,8 @@ frappe.ui.form.on("Quick Purchase Invoice Item", {
         if (!row.entry_type) row.entry_type = "Item";
         row.link_doctype = row.entry_type;
         if (!row.qty) row.qty = 1;
+        // Repaint after the new row is rendered into the DOM.
+        setTimeout(() => paint_row_classes(frm), 30);
     },
 
     entry_type(frm, cdt, cdn) {
@@ -118,6 +121,7 @@ frappe.ui.form.on("Quick Purchase Invoice Item", {
         }
         frm.refresh_field("items");
         compute_amount(frm, cdt, cdn);
+        paint_row_classes(frm);
     },
 
     async entry_ref(frm, cdt, cdn) {
@@ -146,6 +150,23 @@ frappe.ui.form.on("Quick Purchase Invoice Item", {
 });
 
 // --- helpers ----------------------------------------------------------------
+
+/**
+ * Tag each items grid row with a CSS class reflecting its entry_type.
+ * Lets stylesheet draw the coloured left-strip + Type pill without per-cell DOM hacks.
+ */
+function paint_row_classes(frm) {
+    const grid = frm.fields_dict && frm.fields_dict.items && frm.fields_dict.items.grid;
+    if (!grid || !grid.grid_rows) return;
+    grid.grid_rows.forEach(gr => {
+        if (!gr || !gr.row) return;
+        const $row = (gr.row instanceof jQuery) ? gr.row : window.$(gr.row);
+        $row.removeClass("qpi-type-item qpi-type-account");
+        const t = (gr.doc && gr.doc.entry_type) || "Item";
+        $row.addClass(t === "Account" ? "qpi-type-account" : "qpi-type-item");
+    });
+}
+
 
 function compute_amount(frm, cdt, cdn) {
     const row = locals[cdt][cdn];
