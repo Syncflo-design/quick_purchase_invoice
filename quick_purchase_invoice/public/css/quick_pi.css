@@ -1,0 +1,16 @@
+/* Quick PI form polish — subtle, doesn't override Frappe theme */
+
+.quick-pi-form .form-section .form-column .frappe-control[data-fieldname="bill_no"] input {
+    font-weight: 600;
+}
+
+/* Make the entry_type dropdown stand out a touch in the grid */
+.quick-pi-form .grid-row [data-fieldname="entry_type"] .form-control {
+    font-weight: 500;
+}
+
+/* Highlight the running total a bit more */
+.quick-pi-form .frappe-control[data-fieldname="grand_total"] .control-value {
+    font-weight: 700;
+    font-size: 1.05em;
+}
